@@ -1,0 +1,21 @@
+cd /etc/openvpn/easy-rsa/
+source vars
+./clean-all
+./build-ca
+./build-key-server myservername
+./build-dh
+cd keys/
+cp myservername.crt myservername.key ca.crt dh2048.pem /etc/openvpn
+cd /etc/openvpn/easy-rsa/
+source vars
+./build-key client1
+
+ Copy the following files to the client using a secure method:
+
+    /etc/openvpn/ca.crt
+
+    /etc/openvpn/easy-rsa/keys/client1.crt
+
+    /etc/openvpn/easy-rsa/keys/client1.key
+
+openvpn --genkey --secret ta.key

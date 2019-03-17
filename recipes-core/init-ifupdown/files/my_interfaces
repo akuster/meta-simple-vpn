@@ -1,0 +1,39 @@
+auto eth0
+iface eth0 inet static
+	address 192.168.18.40
+	netmask 255.255.255.00
+	gateway 192.168.18.1
+        network 192.168.18.0
+	dns-nameservers IP_DNS_NAMESERVERS
+	dns-search IP_DNS_SEARCH
+
+#auto eth1
+#iface eth1 inet static
+	#address 192.168.18.41
+	#netmask 255.255.255.00
+	#gateway 192.168.18.1
+        #network 192.168.18.0
+	#dns-nameservers IP_DNS_NAMESERVERS
+	#dns-search IP_DNS_SEARCH
+
+#auto eth2
+#iface eth2 inet static
+	#address 192.168.7.1
+	#netmask 255.255.255.00
+	#gateway 192.168.7.1
+        #network 192.168.18.0
+	#dns-nameservers IP_DNS_NAMESERVERS
+	#dns-search IP_DNS_SEARCH
+
+#auto br0                     
+#iface br0 inet static        
+#        address 10.8.0.41   
+#        network 10.8.0.0                       
+#        netmask 255.255.255.0         
+#        broadcast 10.8.0.255
+#        gateway 10.8.0.1
+#        bridge_fd  0     
+#        bridge_maxage 12     
+#	bridge_maxwait 10 
+##        bridge_stp off    
+##        bridge_ports eth0 eth1

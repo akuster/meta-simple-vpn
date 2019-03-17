@@ -1,0 +1,4 @@
+DISTRO_CODENAME = ""
+DISTRO = "Simple"
+DISTRO_NAME = "${DISTRO} NoDistro"
+DISTRO_VERSION = "2.0"

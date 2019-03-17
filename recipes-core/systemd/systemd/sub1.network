@@ -1,0 +1,9 @@
+[Match]
+Name=eth1
+
+[Network]
+Address=192.168.18.50/24
+Gateway=192.168.18.41
+
+[Route]
+Destination=192.168.18.41

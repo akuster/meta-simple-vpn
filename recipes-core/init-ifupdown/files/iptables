@@ -1,0 +1,16 @@
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+
+# p4p1 is WAN interface, #p1p1 is LAN interface
+-A POSTROUTING -o p4p1 -j MASQUERADE
+
+COMMIT
+
+iptables -A INPUT -i eth0 -p udp --dport 1194 -j ACCEPT
+iptables -A INPUT -i tun+ -j ACCEPT
+iptables -A FORWARD -i tun+ -j ACCEPT
+iptables -A FORWARD -i eth1 -o tun+ -j ACCEPT
+iptables -A FORWARD -i eth0 -o tun+ -m state --state ESTABLISHED,RELATED -j ACCEPT
