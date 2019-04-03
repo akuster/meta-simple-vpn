@@ -1,13 +1,13 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/systemd:"
 
-SRC_URI += " \
+SRC_URI_append_simple-vpn = "\ 
     file://rndis.network \
     file://sub1.network \
 "
 
-PACKAGECONFIG_append = " networkd"
+PACKAGECONFIG_append_simple-vpn = " networkd"
 
-do_install_append() {
+do_install_append_simple-vpn() {
     # The network files need to be in /usr/lib/systemd, not ${systemd_unitdir}...
     install -d ${D}${prefix}/lib/systemd/network/
     install -d $[D}/$[sysconfdir}/systemd/network/
