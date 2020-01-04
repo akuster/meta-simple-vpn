@@ -19,3 +19,9 @@ source vars
     /etc/openvpn/easy-rsa/keys/client1.key
 
 openvpn --genkey --secret ta.key
+
+To enable the bbappends in this layer. There are two things
+that can be done in your local.conf.
+1) DISTRO="simple-vpn"
+
+2) OVERRIDES_append = "simple-vpn"
