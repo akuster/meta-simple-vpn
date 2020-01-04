@@ -15,7 +15,6 @@ PACKAGES = "${PN}  \
 
 RDEPENDS_${PN} = "\
 	init-ifupdown \
-	ipsec-tools \
 	procps \
 	resolvconf \
 	lzo \
