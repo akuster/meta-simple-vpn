@@ -1,41 +1,5 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-
-DEV = "eth0"
-DEV1 = "eth1"
-DEV2 = "eth2"
-IP_ADDRESS = "192.168.18.41"
-IP_ADDRESS1 = "192.168.18.42"
-#IP_ADDRESS2 = "10.20.20.43"
-IP_ADDRESS3 = "192.168.18.43"
-
-IP_NETMASK = "255.255.255.0"
-IP_GATEWAY = "192.168.18.1"
-IP_DNS_NAMESERVERS = "75.75.75.75 75.75.76.76"
-IP_DNS_SEARCH = "hsd1.ca.comcast.net"
-
-MY_INTERFACE = "my_interfaces"
-SRC_URI += "file://${MY_INTERFACE}"
+inherit interfaces
 
 do_install_append () {
-	sed -i -e "s/DEV/${DEV}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_ADDRESS/${IP_ADDRESS}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_NETMASK/${IP_NETMASK}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_GATEWAY/${IP_GATEWAY}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_DNS_NAMESERVERS/${IP_DNS_NAMESERVERS}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_DNS_SEARCH/${IP_DNS_SEARCH}/" ${WORKDIR}/${MY_INTERFACE}
-
-	sed -i -e "s/DEV1/${DEV}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_ADDRESS1/${IP_ADDRESS1}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_NETMASK/${IP_NETMASK}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_GATEWAY/${IP_GATEWAY}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_DNS_NAMESERVERS/${IP_DNS_NAMESERVERS}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_DNS_SEARCH/${IP_DNS_SEARCH}/" ${WORKDIR}/${MY_INTERFACE}
-
-	sed -i -e "s/DEV2/${DEV2}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_ADDRESS2/${IP_ADDRESS2}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_NETMASK/${IP_NETMASK}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_GATEWAY/${IP_GATEWAY}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_DNS_NAMESERVERS/${IP_DNS_NAMESERVERS}/" ${WORKDIR}/${MY_INTERFACE}
-	sed -i -e "s/IP_DNS_SEARCH/${IP_DNS_SEARCH}/" ${WORKDIR}/${MY_INTERFACE}
-	install -m 0644  ${WORKDIR}/${MY_INTERFACE} ${D}${sysconfdir}/network/interfaces
+	install -m 0644  ${MY_INTERFACE} ${D}${sysconfdir}/network/interfaces
 }
