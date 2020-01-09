@@ -16,7 +16,8 @@ VPN_SERVER_IP ?= "${VPN_CLIENT_SUBNET}.0"
 VPN_NETMASK ?= "255.255.255.0"
 VPN_CLIENT_START_IP ?= "${VPN_CLIENT_SUBNET}.1" 
 VPN_PRIVATE_START_IP ?= "${VPN_PRIVATE_SUBNET}.1" 
-VPN_PRIVATE_IFACE ?= "eth2"
+VPN_PRIVATE_IFACE ?= "eth1"
+VPN_PRIVATE_BROADCAST ?= "${VPN_PRIVATE_SUBNET}.255"
 
 VPN_LOCAL_IP ?= "192.168.18.40"
 VPN_PORT ?= "1194"
@@ -35,7 +36,7 @@ VPN_TLS_AUTH ?= "ta.key 0"
 VPN_KEY_DIRECTION ?= "0"
 VPN_AUTH ?= "SHA256"
 VPN_CIPHER ?= "AES-256-CBC"
-VPN_COMP_LZO ?= "True"
+VPN_COMP_LZO ?= ""
 VPN_CLIENT_TO_CLIENT ?= "True"
 VPN_MAX_CLIENTS ?= "100"
 VPN_USER ?= "nobody"
@@ -47,7 +48,8 @@ VPN_LOG_VERBOSITY ?= "5"
 VPN_SCRIPT_SECURITY ?= "2"
 VPN_UP ?= "ifup.sh"
 VPN_DOWN ?= "ifdown.sh"
-VPN_SPRIPTS_DIR ?= "/etc/openvpn"
+VPN_SCRIPTS_DIR ?= "/etc/openvpn"
+VPN_KEYS_DIR ?= "/etc/openvpn/sample/sample-keys/"
 
 def create_openvpn_server_ifup(d):
     cfile = os.path.join(d.getVar('B'), d.getVar('VPN_UP'))
@@ -56,11 +58,19 @@ def create_openvpn_server_ifup(d):
 
     localdata = bb.data.createCopy(d)
     iface = localdata.getVar('VPN_PRIVATE_IFACE')
+    ip = localdata.getVar('VPN_PRIVATE_START_IP')
+    netmask = localdata.getVar('VPN_IP_NETMASK')
+    broadcast = localdata.getVar('VPN_PRIVATE_BROADCAST')
 
     try:
         with open(cfile, 'w') as cfgfile:
-            cfgfile.write('#! /bin/sh\n')
+            cfgfile.write('#! /bin/sh\n\n')
             cfgfile.write('ifup %s\n' % iface)
+
+            cfgfile.write('ifconfig %s %s  netmask %s broadcast %s up\n' % (iface, ip, netmask, broadcast))
+            cfgfile.write('iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\n')
+            cfgfile.write('iptables -A FORWARD -i eth0 -o %s -m state --state RELATED,ESTABLISHED -j ACCEPT\n' % iface)
+            cfgfile.write('iptables -A FORWARD -i %s -o eth0 -j ACCEPT\n' % iface)
 
     except OSError:
         bb.fatal('Unable to open %s' % cfile)
@@ -75,8 +85,8 @@ def create_openvpn_server_ifdown(d):
 
     try:
         with open(cfile, 'w') as cfgfile:
-            cfgfile.write('#! /bin/sh\n')
-            cfgfile.write('ifdown %s\n' % iface)
+            cfgfile.write('#! /bin/sh\n\n')
+            cfgfile.write('ifconfig %s down\n' % iface)
 
     except OSError:
         bb.fatal('Unable to open %s' % cfile)
@@ -120,6 +130,9 @@ python create_openvpn_server_config() {
     script_security = localdata.getVar('VPN_SCRIPT_SECURITY')
     up = localdata.getVar('VPN_UP')
     down = localdata.getVar('VPN_DOWN')
+    scripts_dir = localdata.getVar('VPN_SCRIPTS_DIR')
+    keys_dir = localdata.getVar('VPN_KEYS_DIR')
+
 
     ifconfig = localdata.getVar('VPN_IFCONFIG')
     netmask = localdata.getVar('VPN_IP_NETMASK')
@@ -130,10 +143,10 @@ python create_openvpn_server_config() {
             cfgfile.write('port %s\n' % port)
             cfgfile.write('proto %s\n' % proto)
             cfgfile.write('dev %s\n' % dev)
-            cfgfile.write('\nca  %s\n' % ca)
-            cfgfile.write('cert %s\n' % cert)
-            cfgfile.write('key  %s\n' % key)
-            cfgfile.write('dh  %s\n' % dh)
+            cfgfile.write('\nca  %s%s\n' % (keys_dir, ca))
+            cfgfile.write('cert %s%s\n' % (keys_dir, cert))
+            cfgfile.write('key  %s%s\n' % (keys_dir, key))
+            cfgfile.write('dh  %s%s\n' % (keys_dir, dh))
             cfgfile.write('\ntopology %s\n' % topology)
             cfgfile.write('\nserver %s %s\n' %(server, netmask))
             cfgfile.write('ifconfig-pool-persist %s\n' % ifconfig_pool_persist)
@@ -152,7 +165,7 @@ python create_openvpn_server_config() {
                 cfgfile.write('client-to-client\n')
 
             cfgfile.write('keepalive %s\n' % keepalive)
-            cfgfile.write('tls-auth %s\n' % tls_auth)
+            cfgfile.write('tls-auth %s%s\n' % (keys_dir, tls_auth))
             cfgfile.write('key-direction %s\n' % key_direction)
             cfgfile.write('auth %s\n' % auth)
             cfgfile.write('cipher %s\n' % cipher)
@@ -171,8 +184,8 @@ python create_openvpn_server_config() {
             cfgfile.write('log %s\n' % log)
             cfgfile.write('verb %s\n' % log_verbosity)
             cfgfile.write('script-security %s\n' % script_security)
-            cfgfile.write('up "%s"\n' % up)
-            cfgfile.write('down  "%s"\n' % down )
+            cfgfile.write('up "%s/%s"\n' % (scripts_dir, up))
+            cfgfile.write('down  "%s/%s"\n' % (scripts_dir, down ))
             
     except OSError:
         bb.fatal('Unable to open %s' % cfile)
