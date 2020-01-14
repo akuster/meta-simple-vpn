@@ -4,60 +4,39 @@ LIC_FILES_CHKSUM = "file://Licensing/gpl-2.0.txt;md5=75859989545e37968a99b631ef4
 LICENSE = "GPLv2"
 SECTION = "Security/Cryptography"
 
-DEPENDS_class-native = "openssl-native"
-
 SRCREV = "4152244bae2101018410df952e0bc00049947f8a"
 SRC_URI = "git://github.com/OpenVPN/easy-rsa.git;branch='v${PV}'"
 
 S = "${WORKDIR}/git"
 
-inherit autotools
+inherit allarch
 
-KEY_SIZE="2048"
-
-# days to expire
-CA_EXPIRE="3650"
-
-# days to expire
-KEY_EXPIRE="3650"
-
-KEY_COUNTRY="US"
-KEY_PROVINCE="CA"
-KEY_CITY="SanJose"
-KEY_ORG="Pono"
-KEY_EMAIL="akuster@kama-aina.net"
-KEY_OU="Kimo"
-KEY_NAME="server"
-
-do_compile() {
-        src_files="easyrsa3/ Licensing/ COPYING.md ChangeLog README.md README.quickstart.md"
-        for f in $src_files
-        do
-                cp -a ${S}/$f ${B} 
-        done
-
-        cp -R ${S}/doc ${B} 
-
-        #sed -i -e "s/~~~//" "${B}/easyrsa3/easyrsa"
-}
-
-
-do_compile2_append() {
-	sed -i -e 's:KEY_SIZE=.*$:KEY_SIZE=${KEY_SIZE}:' ${S}/easy-rsa/2.0/vars
-	sed -i -e 's:KEY_EXPIRE=.*$:KEY_EXPIRE=${KEY_EXPIRE}:' ${S}/easy-rsa/2.0/vars
-	sed -i -e 's:CA_EXPIRE=.*$:CA_EXPIRE=${CA_EXPIRE}:' ${S}/easy-rsa/2.0/vars
-	sed -i -e 's:KEY_COUNTRY=.*$:KEY_COUNTRY="${KEY_COUNTRY}":' ${S}/easy-rsa/2.0/vars
-	sed -i -e 's:KEY_PROVINCE=.*$:KEY_PROVINCE="${KEY_PROVINCE}":'  ${S}/easy-rsa/2.0/vars
- 	sed -i -e 's:KEY_CITY=.*$:KEY_CITY="${KEY_CITY}":' ${S}/easy-rsa/2.0/vars
- 	sed -i -e 's:KEY_ORG=.*$:KEY_ORG="${KEY_ORG}":' ${S}/easy-rsa/2.0/vars
- 	sed -i -e 's:KEY_EMAIL=.*$:KEY_EMAIL="${KEY_EMAIL}":' ${S}/easy-rsa/2.0/vars
- 	sed -i -e 's:KEY_OU=.*$:KEY_OU="${KEY_OU}":' ${S}/easy-rsa/2.0/vars
-	sed -i -e 's:KEY_NAME=.*$:KEY_NAME="${KEY_NAME}":' ${S}/easy-rsa/2.0/vars
-}
+do_configure[noexec] = "1"
+do_compile[noexec] = "1"
 
 do_install () {
-	install -d ${D}/${sysconfdir}/openvpn/easyrsa3
-	cp -R ${B}/easyrsa3 ${D}/${sysconfdir}/openvpn
+	install -d ${D}/${bindir}
+	install -d ${D}/${mandir}/${BPN}
+	install -d ${D}/${datadir}/${BPN}
+	install -d ${D}/${sysconfdir}/easyrsa3/x509-types
+
+	install -m 750 ${B}/easyrsa3/easyrsa ${D}/${bindir}
+    install ${B}/doc/* ${D}/${mandir}/${BPN}
+    install ${B}/Licensing/* ${D}/${datadir}/${BPN}
+	install -m 775 ${B}/easyrsa3/*.cnf ${D}/${sysconfdir}/easyrsa3
+	install -m 775 ${B}/easyrsa3/x509-types/* ${D}/${sysconfdir}/easyrsa3/x509-types
 }
 
+do_install_append-class-native () {
+	install -d ${D}/${bindir}
+	install -d ${D}/${sysconfdir}/easyrsa3/x509-types
+
+	install -m 755 ${B}/easyrsa3/easyrsa ${D}/${bindir}
+	install -m 775 ${B}/easyrsa3/*.cnf ${D}/${sysconfdir}/easyrsa3
+	install -m 775 ${B}/easyrsa3/x509-types/* ${D}/${sysconfdir}/easyrsa3/x509-types
+}
+
+FILES_${PN} += "${sbindir}/easyrsa"
+
 RDEPENDS_${PN} = "openssl"
+BBCLASSEXTEND = "native"
