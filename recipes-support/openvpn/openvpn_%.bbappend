@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+DEPENDS_class-native = "lzo-native openssl-native "
+
 inherit openvpn useradd
 
 VPN_USER ?= "nobody"
@@ -19,3 +21,5 @@ USERADD_PARAM_${PN} = "--system -g ${VPN_GROUP} --home-dir  \
 
 SYSTEMD_AUTO_ENABLE_simple-vpn = "disable"
 SYSTEMD_SERVICE_${PN}_simple-vpn = "openvpn@server.service"
+EXTRA_OECONF_remove_simple-vpn = "--enable-iproute2"
+BBCLASSEXTEND = "native"
