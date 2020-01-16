@@ -7,8 +7,6 @@ IMAGE_LINGUAS = " "
 
 LICENSE = "MIT"
 
-DISTRO_FEATURES_append = " ipv6 ipsec" 
-
 # aparmor
 # DNS
 # DHCP
@@ -17,4 +15,3 @@ IMAGE_ROOTFS_SIZE ?= "8192"
 
 inherit core-image extrausers
 EXTRA_USERS_PARAMS = "usermod -P 1SimpleVpn! root;"
-DISTRO_FEATURES_remove = "x11"
