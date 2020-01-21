@@ -14,9 +14,11 @@ VPN_PRIVATE_IFACE ?= "eth1"
 CERT_DIR ??= "openvpn/ssl"
 VPN_KEYS_DIR ?= "${sysconfdir}/${CERT_DIR}/"
 VPN_CA ?= "ca.crt"
-VPN_CERT ?= "server.crt"
-VPN_KEY ?= "server.key"
+VPN_CERT ?= "${SERVER_NAME}.crt"
+VPN_KEY ?= "${SERVER_NAME}.key"
 VPN_DH ?= "dh.pem"
+
+OPENVPN_CLIENT_CONF ??= "${CLIENT_NAME}.conf"
 
 IPTABLES_IN ?= "${IFACE}"
 IPTABLES_OUT ?= "${VPN_PRIVATE_IFACE}"
