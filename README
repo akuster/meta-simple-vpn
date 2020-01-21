@@ -25,3 +25,26 @@ that can be done in your local.conf.
 1) DISTRO="simple-vpn"
 
 2) OVERRIDES_append = "simple-vpn"
+
+./easyrsa init-pki
+#(echo "yes" ) |  ./easyrsa init-pki
+./easyrsa build-ca
+#( echo "simplevpn"; sleep 1; echo "simplevpn"; echo  "puna") | ./easyrsa build-ca
+
+./easyrsa init-pki
+./easyrsa gen-req UNIQUE_SERVER_SHORT_NAME nopass
+
+./easyrsa init-pki
+./easyrsa gen-req UNIQUE_CLIENT_SHORT_NAME
+
+# Import CA
+./easyrsa import-req /path/to/received.req UNIQUE_SHORT_FILE_NAME
+
+# Signing
+#Client
+./easyrsa sign-req client UNIQUE_SHORT_FILE_NAME
+
+#Server
+./easyrsa sign-req server UNIQUE_SHORT_FILE_NAME
+#DH Gen
+./easyrsa gen-dh
