@@ -33,7 +33,7 @@ RDEPENDS_${PN} = "\
     iproute2 \
     iptables \
     sysklogd \
-    python-fail2ban \
+    python3-fail2ban \
     ntpdate \
     ntp-tickadj \
     ntp \
