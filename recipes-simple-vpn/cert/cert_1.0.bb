@@ -3,7 +3,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 LICENSE = "GPLv2"
 SECTION = "Security/Cryptography"
 
-DEPENDS += "easy-rsa-native"
+DEPENDS += "cert-native"
 
 inherit easy-rsa-cert allarch
 
