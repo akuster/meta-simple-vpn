@@ -1,0 +1,9 @@
+/var/log/openvpn.log {
+    weekly
+    rotate 12
+    copytruncate
+    compress
+    delaycompress
+    missingok
+    notifempty
+}
