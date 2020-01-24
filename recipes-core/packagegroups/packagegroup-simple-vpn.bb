@@ -45,6 +45,7 @@ RDEPENDS_${PN} = "\
     tzdata-posix \
     tzdata-right \
     logrotate \
+    cronie \
     ${@bb.utils.contains("DISTRO_FEATURES", "apparmor", "apparmor", "",d)} \
 "
 
