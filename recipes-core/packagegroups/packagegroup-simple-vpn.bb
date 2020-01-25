@@ -46,6 +46,7 @@ RDEPENDS_${PN} = "\
     tzdata-right \
     logrotate \
     cronie \
+    sudo \
     ${@bb.utils.contains("DISTRO_FEATURES", "apparmor", "apparmor", "",d)} \
 "
 
