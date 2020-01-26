@@ -10,7 +10,7 @@ inherit native easy-rsa-cert
 PASSPHRASE ?= "SimpleVpn"
 COMMON_NAME ?= "server"
 SERVER_NAME ?= "server"
-CLIENT_NAME ?= ""
+CLIENT_NAME ?= "client"
 CERT_DIR ?= "openvpn/ssl"
 
 CERT_AUTO_GEN ?= "1"
@@ -69,7 +69,7 @@ do_install () {
     install -m 600 ${B}/pki/dh.pem ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}
     install -m 600 ${B}/pki/ta.key ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}
 
-    if [ ! -z "${CLIENT_NAME}" ]; then
+    if [ -z "${CLIENT_NAME}" ]; then
         install -d ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client
         install -m 600 ${B}/pki/issued/${CLIENT_NAME}.crt ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client
         install -m 600 ${B}/pki/private/${CLIENT_NAME}.key ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client
