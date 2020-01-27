@@ -69,7 +69,7 @@ do_install () {
     install -m 600 ${B}/pki/dh.pem ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}
     install -m 600 ${B}/pki/ta.key ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}
 
-    if [ -z "${CLIENT_NAME}" ]; then
+    if [ "${CLIENT_NAME}" ]; then
         install -d ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client
         install -m 600 ${B}/pki/issued/${CLIENT_NAME}.crt ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client
         install -m 600 ${B}/pki/private/${CLIENT_NAME}.key ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client

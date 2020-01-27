@@ -28,7 +28,7 @@ do_install () {
 	install -m 600 ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/dh.pem ${D}/${sysconfdir}/${CERT_DIR}
 	install -m 600 ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/ta.key ${D}/${sysconfdir}/${CERT_DIR}
 
-    if [ -z "${CLIENT_NAME}" ]; then
+    if [ "${CLIENT_NAME}" ]; then
 	    install -d ${D}/${sysconfdir}/${CERT_DIR}/client
 	    install -m 600 ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client/${CLIENT_NAME}.crt ${D}/${sysconfdir}/${CERT_DIR}/client
 	    install -m 600 ${STAGING_EASYRSA_BUILDDIR}/${CERT_DIR}/client/${CLIENT_NAME}.key ${D}/${sysconfdir}/${CERT_DIR}/client
