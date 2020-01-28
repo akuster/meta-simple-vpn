@@ -72,7 +72,8 @@ def create_openvpn_server_ifup(d):
         bb.fatal('Unable to read VPN_UP')
 
     localdata = bb.data.createCopy(d)
-    iface = localdata.getVar('VPN_PRIVATE_IFACE')
+    iface = localdata.getVar('VPN_SEVER_IFACE')
+    private_iface = localdata.getVar('VPN_PRIVATE_IFACE')
     ip = localdata.getVar('VPN_PRIVATE_START_IP')
     netmask = localdata.getVar('VPN_IP_NETMASK')
     broadcast = localdata.getVar('VPN_PRIVATE_BROADCAST')
@@ -82,7 +83,11 @@ def create_openvpn_server_ifup(d):
     try:
         with open(cfile, 'w') as cfgfile:
             cfgfile.write('#! /bin/sh\n\n')
-            cfgfile.write('ifconfig %s %s  netmask %s broadcast %s up\n' % (iface, ip, netmask, broadcast))
+            cfgfile.write('ifconfig %s %s  netmask %s broadcast %s up\n' % (private_iface, ip, netmask, broadcast))
+            cfgfile.write('iptables -A FORWARD -i %s -o %s -m state --state RELATED,ESTABLISHED -j ACCEPT\n' % (iface, private_iface))
+            cfgfile.write('iptables -A FORWARD -i %s -o %s -j ACCEPT\n' % (private_iface, iface))
+            cfgfile.write('iptables -t nat -A POSTROUTING -o %s -j MASQUERADE\n' % iface)
+
 
     except OSError:
         bb.fatal('Unable to open %s' % cfile)
@@ -98,6 +103,10 @@ def create_openvpn_server_ifdown(d):
     try:
         with open(cfile, 'w') as cfgfile:
             cfgfile.write('#! /bin/sh\n\n')
+            cfgfile.write('iptables --flush\n')
+            cfgfile.write('iptables --delete-chain\n')
+            cfgfile.write('iptables -t nat --flush\n')
+            cfgfile.write('iptables -t nat --delete-chain\n')
             cfgfile.write('ifconfig %s down\n' % iface)
 
     except OSError:
