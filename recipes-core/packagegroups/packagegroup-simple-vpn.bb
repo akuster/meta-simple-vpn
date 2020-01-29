@@ -48,6 +48,7 @@ RDEPENDS_${PN} = "\
     cronie \
     sudo \
     ${@bb.utils.contains("DISTRO_FEATURES", "apparmor", "apparmor", "",d)} \
+    ${@bb.utils.contains("DISTRO_FEATURES", "pam", "pam-plugin-wheel", "",d)} \
 "
 
 # Needed for openvpn support
