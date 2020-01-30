@@ -83,6 +83,10 @@ def create_openvpn_server_ifup(d):
     try:
         with open(cfile, 'w') as cfgfile:
             cfgfile.write('#! /bin/sh\n\n')
+            cfgfile.write('iptables --flush\n')
+            cfgfile.write('iptables --delete-chain\n')
+            cfgfile.write('iptables -t nat --flush\n')
+            cfgfile.write('iptables -t nat --delete-chain\n')
             cfgfile.write('ifconfig %s %s  netmask %s broadcast %s up\n' % (private_iface, ip, netmask, broadcast))
             cfgfile.write('iptables -A FORWARD -i %s -o %s -m state --state RELATED,ESTABLISHED -j ACCEPT\n' % (iface, private_iface))
             cfgfile.write('iptables -A FORWARD -i %s -o %s -j ACCEPT\n' % (private_iface, iface))
