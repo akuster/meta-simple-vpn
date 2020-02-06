@@ -14,7 +14,7 @@ bantime  = 2d
 findtime  = 30m
 
 # "maxretry" is the number of failures before a host get banned.
-maxretry = 3
+maxretry = 2 
 
 backend = auto
 
@@ -24,9 +24,7 @@ logencoding = auto
 
 enabled = true
 
-
 filter = %(__name__)s
-
 
 destemail = root@localhost
 
@@ -127,21 +125,34 @@ action = %(action_)s
 # SSH servers
 #
 
-[sshd]
+[sshd]                                                                              
 
-# To use more aggressive sshd modes set filter parameter "mode" in jail.local:
-# normal (default), ddos, extra or aggressive (combines all).
+# To use more aggressive sshd modes set filter parameter "mode" in jail.local:      
+# normal (default), ddos, extra or aggressive (combines all).                       
 # See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.
-mode    = normal
-filter  = sshd[mode=%(mode)s]
-port    = ssh, 2222
-logpath = %(sshd_log)s
-backend = %(sshd_backend)s
+banaction = iptables                                                       
+mode    = aggressive                                                          
+port    = ssh                                                              
+logpath = %(sshd_log)s                                                          
+backend = %(sshd_backend)s                                                 
+enabled = true 
 
-[ssh]
+[dropbear]                                                                 
+
+port     = ssh                                                             
+logpath  = %(dropbear_log)s                                                
+backend  = %(dropbear_backend)s  
+
+[pam-generic]                                              
+# pam-generic filter can be customized to monitor specific subset of 'tty's
+banaction = %(banaction_allports)s                                
+logpath  = %(syslog_authpriv)s
+backend  = %(syslog_backend)s
 enabled = true
-banaction = iptables-multiport
-port = 2222
-filter = sshd
-logpath = /var/log/auth.log
-maxretry = 3
+
+
+[xinetd-fail]
+banaction = iptables-multiport-log                                            
+logpath   = %(syslog_daemon)s                                              
+backend   = %(syslog_backend)s                                                  
+maxretry  = 2            
