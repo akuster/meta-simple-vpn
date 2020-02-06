@@ -8,7 +8,6 @@ SRC_URI_append_simple-vpn = "\
 do_install_append_simple-vpn () {
 	install -d ${D}/${sysconfdir}/fail2ban
 	install -d ${D}/${sysconfdir}/fail2ban/action.d
-	install -m 0744 ${WORKDIR}/jail.local ${D}${sysconfdir}/fail2ban
 	install -m 0755 ${WORKDIR}/ufw-ssh.conf ${D}${sysconfdir}/fail2ban/action.d
-	rm -f ${D}${sysconfdir}/fail2ban/jail.conf
+	install -m 0744 ${WORKDIR}/jail.local ${D}${sysconfdir}/fail2ban/jail.conf
 }
