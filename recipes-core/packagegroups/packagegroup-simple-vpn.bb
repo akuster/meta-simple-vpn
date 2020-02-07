@@ -18,7 +18,6 @@ RDEPENDS_${PN} = "\
     resolvconf \
     lzo \
     openssl \
-    openssl-bin \
     libssl \
     libcrypto \
     openssl-conf \
@@ -27,7 +26,6 @@ RDEPENDS_${PN} = "\
     bridge-utils \
     openssh-sshd \
     openssh-keygen \
-    openssh-scp \
     packagegroup-openvpn \
     kernel-modules \
     iproute2 \
