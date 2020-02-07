@@ -20,6 +20,7 @@ CERT_SRC_DIR ?= ""
 STAGING_EASYRSA_BUILDDIR ?= "${TMPDIR}/work-shared/easyrsa"
 
 do_configure[noexec] = "1"
+do_compile[nostamp] = "1"
 
 do_compile() {
     if [ "${CERT_AUTO_GEN}" -eq "1" ]; then
