@@ -17,6 +17,7 @@ STAGING_EASYRSA_BUILDDIR ?= "${TMPDIR}/work-shared/easyrsa"
 
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
+do_install[depends] += "cert-native:do_compile"
 
 do_install () {
 	install -d ${D}/${sysconfdir}/${CERT_DIR}
