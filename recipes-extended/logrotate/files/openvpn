@@ -1,6 +1,7 @@
 /var/log/openvpn.log {
     weekly
     rotate 12
+    dateext
     copytruncate
     compress
     delaycompress

@@ -1,4 +1,8 @@
 /var/log/fail2ban.log {
+    rotate 7
+    size 10k
+    dateext
+    compress
     missingok
     notifempty
     postrotate
