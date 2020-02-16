@@ -3,13 +3,10 @@ SUMMARY = "A small image for simple vpn gateway."
 IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
 IMAGE_INSTALL_append = " packagegroup-simple-vpn os-release"
 
+IMAGE_FEATURES = ""
 IMAGE_LINGUAS = " "
 
 LICENSE = "MIT"
-
-# aparmor
-# DNS
-# DHCP
 
 IMAGE_ROOTFS_SIZE ?= "8192"
 
