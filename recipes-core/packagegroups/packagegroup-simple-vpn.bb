@@ -36,7 +36,9 @@ RDEPENDS_${PN} = "\
     ntp-tickadj \
     ntp \
     sntp \
+    ntpq \
     ntp-utils \
+    ntp-cronhourly \
     tzdata \
     tzdata-americas \
     tzdata-misc \
@@ -53,19 +55,20 @@ RDEPENDS_${PN} = "\
 # Needed for openvpn support
 RDEPENDS_packagegroup-openvpn = "\
     cert-server \
-	openvpn \
-	kernel-module-tun \
+    openvpn \
+    kernel-module-tun \
 "
 
 # needed for iptables support
 RDEPENDS_packagegroup-iptables = "\
-	kernel-module-x-tables \
-	kernel-module-ip-tables \
+    iptables-modules \
+    kernel-module-x-tables \
+    kernel-module-ip-tables \
     kernel-module-iptable-filter \
-	kernel-module-iptable-nat \
-	kernel-module-nf-defrag-ipv4 \
-	kernel-module-nf-conntrack \
-	kernel-module-nf-conntrack-ipv4 \
-	kernel-module-nf-nat \
-	kernel-module-ipt-masquerade \
+    kernel-module-iptable-nat \
+    kernel-module-nf-defrag-ipv4 \
+    kernel-module-nf-conntrack \
+    kernel-module-nf-conntrack-ipv4 \
+    kernel-module-nf-nat \
+    kernel-module-ipt-masquerade \
 "
