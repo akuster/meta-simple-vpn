@@ -8,8 +8,8 @@ inherit packagegroup
 
 PROVIDES = "${PACKAGES}"
 PACKAGES = "${PN}  \
-	packagegroup-openvpn \
-	packagegroup-iptables \
+    packagegroup-openvpn \
+    packagegroup-iptables \
 "
 
 RDEPENDS_${PN} = "\
@@ -30,7 +30,7 @@ RDEPENDS_${PN} = "\
     kernel-modules \
     iproute2 \
     iptables \
-    sysklogd \
+    ${VIRTUAL-RUNTIME_base-utils-syslog} \
     python3-fail2ban \
     ntpdate \
     ntp-tickadj \
@@ -47,6 +47,13 @@ RDEPENDS_${PN} = "\
     logrotate \
     cronie \
     sudo \
+    util-linux \
+    suricata \
+    python3-suricata-update \
+    chkrootkit \
+    postfix \
+    postfix-cfg \
+    arpwatch \
     ${@bb.utils.contains("DISTRO_FEATURES", "apparmor", "apparmor", "",d)} \
     ${@bb.utils.contains("DISTRO_FEATURES", "pam", "pam-plugin-wheel", "",d)} \
     ${@bb.utils.contains("DISTRO_FEATURES", "pam 2fa", "google-authenticator-libpam pam-google-authenticator", "",d)} \
