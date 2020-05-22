@@ -1,0 +1,6 @@
+# short-description: Create SD card image for Edgerouter
+# long-description: Create a partitioned SD card image for MIPS64 Edgerouter reference hardware.
+part /boot --source bootimg-partition --ondisk sda --fstype=vfat --label boot --active --align 4 --size 16
+part / --source rootfs --ondisk sda --fstype=ext4 --label root --align 4 --exclude-path var home
+part /var --source rootfs --ondisk mmcblk1 --fstype=ext4 --label var --align 4 --rootfs-dir=${IMAGE_ROOTFS}/var --size 2G
+part /home --source rootfs --ondisk mmcblk1 --fstype=ext4 --label home --align 4 --rootfs-dir=${IMAGE_ROOTFS}/home
